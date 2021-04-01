@@ -1,0 +1,7 @@
+name: blog-api-env
+
+dependencies:
+  - python=3.9
+  - pip:
+    - fastapi
+    - uvicorn
