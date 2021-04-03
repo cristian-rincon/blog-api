@@ -1,8 +1,9 @@
+# 2.51 - https://www.youtube.com/watch?v=7t2alSnE2-I
 # import uvicorn
 from typing import Optional
+
 from fastapi import FastAPI
 from pydantic import BaseModel
-
 
 app = FastAPI()
 
