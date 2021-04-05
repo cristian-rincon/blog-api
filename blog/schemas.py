@@ -3,12 +3,6 @@ from typing import List
 from pydantic import BaseModel
 
 
-class User(BaseModel):
-    name: str
-    email: str
-    password: str
-
-
 class BaseBlog(BaseModel):
     title: str
     body: str
@@ -16,8 +10,14 @@ class BaseBlog(BaseModel):
 
 class Blog(BaseBlog):
 
-    class Config:
+    class Config():
         orm_mode = True
+
+
+class User(BaseModel):
+    name: str
+    email: str
+    password: str
 
 
 class UserResponse(BaseModel):
