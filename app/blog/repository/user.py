@@ -20,3 +20,15 @@ def get_one(id: int, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'User with the id {id} is not found.')
     return user
+
+
+def bulk_load(data, db: Session):
+
+    for i in data:
+        new_post = models.User(name=i[0],
+                               email=i[1],
+                               password=hashing.Hash.bcrypt(i[2]))
+        db.add(new_post)
+        db.commit()
+        db.refresh(new_post)
+    return len(data)

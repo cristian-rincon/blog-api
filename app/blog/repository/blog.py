@@ -45,3 +45,12 @@ def get_one(id: int, response: Response, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'Post with the id {id} is not found.')
     return post
+
+
+def bulk_load(data, db: Session):
+    for i in data:
+        new_post = models.Blog(title=i[0], body=i[1], user_id=i[2])
+        db.add(new_post)
+        db.commit()
+        db.refresh(new_post)
+    return len(data)

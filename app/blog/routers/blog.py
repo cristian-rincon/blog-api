@@ -1,6 +1,8 @@
+import csv
+from io import StringIO
 from typing import List
 
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, File, Response, status
 from sqlalchemy.orm import Session
 
 from blog import database, oauth2, schemas
@@ -48,3 +50,22 @@ def get_post(id: int,
              db: Session = Depends(get_db),
              current_user: schemas.User = Depends(oauth2.get_current_user)):
     return blog.get_one(id, response, db)
+
+
+@router.post('/bulk')
+def bulk_load_posts(file: bytes = File(...),
+                    db: Session = Depends(get_db),
+                    current_user: schemas.User = Depends(
+                        oauth2.get_current_user)):
+
+    content = file.decode()
+    file = StringIO(content)
+    reader = csv.reader(file, delimiter=",")
+    header = next(reader)
+    data = []
+    if header is not None:
+        for row in reader:
+            data.append(tuple(row))
+
+    blog.bulk_load(data, db)
+    return f'{len(data)} posts loaded'
